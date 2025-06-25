@@ -51,7 +51,7 @@
 			List<Command> cmds = new();
 			foreach (var argument in Args)
 			{
-				if (argument[0] == PREFIX)
+				if (argument[0] == PREFIX) // parse command
 				{
 					var key = argument.TrimStart(PREFIX);
 
@@ -71,7 +71,7 @@
 
 					cmds.Add(cmd);
 				}
-				else
+				else // add command values
 				{
 					if (cmd == null)
 					{
@@ -91,10 +91,13 @@
 
 			var invalidCmd = cmds.FirstOrDefault(c => c.CommandValues == Necessity.Required && c.Values.Count == 0);
 			if (invalidCmd != null) error = $"The command \"{invalidCmd.KeyString}\" is missing required parameters.";
+
 			var doc = string.Join(Environment.NewLine, _commands.Values.Where(c => c.HasHelpText)
 							.Select(c => c.DocumentationString)
 							.Prepend(_appDescription)
+							.Prepend(string.Empty)
 							.Prepend(_appName));
+
 			return new CommandCollection(cmds, doc);
 		}
 	}
